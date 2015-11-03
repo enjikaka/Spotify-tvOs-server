@@ -65,6 +65,13 @@ var WebAPI = {
           errorCallback(error);
         });
     },
+    artistSearch: function(q, successCallback, errorCallback) {
+        this.getJSON('https://api.spotify.com/v1/search?q=' + q + '&type=artist', function(json) {
+          successCallback(json);
+        }, function(error) {
+          errorCallback(error);
+        });
+    },
     urlToId: function(uri) {
       try {
         if (uri.indexOf('spotify:') !== -1) {

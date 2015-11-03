@@ -1,4 +1,4 @@
-/* global Presenter, WebAPI, Player, Playlist, MediaItem, App, evaluateScripts */
+/* global Presenter, WebAPI, Player, getFeature, Playlist, MediaItem, App, evaluateScripts */
 
 function escapeForXML(string) {
   return string
@@ -103,7 +103,14 @@ var Album = {
     return template;
   },
   createList: function(grid) {
-    var templateString = '<listTemplate> <list> <header>Songs</header> '+grid+' </list> </listTemplate>';
+    var templateString = `
+      <listTemplate>
+        <list>
+          <header>Songs</header>
+          ${grid}
+        </list>
+      </listTemplate>
+    `;
 
     return Presenter.createDocument(templateString);
   },
@@ -143,6 +150,82 @@ var Album = {
   }
 };
 
+var Search = {
+  doc: null,
+  createGrid: function(json) {
+    var template = '<header><title>Artists</title></header><section>';
+
+    for (var i = 0; i < json.artists.items.length; i++) {
+      var artist = json.artists.items[i];
+      var name = escapeForXML(artist.name);
+
+      template += `
+        <listItemLockup artistId="${artist.id}">
+           <title>${name}</title>
+        </listItemLockup>
+      `;
+    }
+
+    template += '</section>';
+
+    return template;
+  },
+  createSearch: function(json) {
+    var templateString = `
+      <searchTemplate>
+        <searchField />
+        <list />
+      </searchTemplate>
+    `;
+
+    return Presenter.createDocument(templateString);
+  },
+  search: function(query) {
+    WebAPI.artistSearch(query, function(searchJSON) {
+      Search.updateGrid(searchJSON);
+    });
+  },
+  searchViewLoad: function(event) {
+    var searchField = event.target.childNodes.item(0);
+    var keyboard = searchField.getFeature('Keyboard');
+    keyboard.onTextChange = function() {
+      var query = Search.sanitizeString(keyboard.text.replace(/-/g, ''));
+
+      if (query.length > 0) {
+        Search.search(query);
+      }
+    };
+  },
+  sanitizeString: function(string) {
+    return string.replace(/\s/g, '+')
+          .replace(/å/g, 'a')
+          .replace(/ä/g, 'a')
+          .replace(/ö/g, 'o');
+  },
+  updateGrid: function(json) {
+    var grid = this.createGrid(json);
+    var ele = this.doc.childNodes.item(0).childNodes.item(0).childNodes.item(1);
+    ele.innerHTML = grid;
+  },
+  clickAlbum: function(event) {
+    var ele = event.target;
+    var artistId = ele.getAttribute('artistId');
+    AlbumList.render(artistId);
+  },
+  render: function() {
+    var self = this;
+
+    var searchView = self.createSearch();
+
+    searchView.addEventListener('load', self.searchViewLoad);
+    searchView.addEventListener('select', self.clickAlbum);
+
+    this.doc = searchView;
+
+    Presenter.pushDocument(searchView);
+  }
+};
+
 
 var createAlert = function(title, desc) {
   var alertString = `
@@ -166,7 +249,7 @@ App.onLaunch = function(options) {
 
   evaluateScripts(javascriptFiles, function(success) {
     if (success) {
-      AlbumList.render('6zDFhpdu4WUVVGTz0JSLMh');
+      Search.render();
     } else {
       var alert = createAlert('Woops!', 'Looks like an error occured!');
       Presenter.modalDialogPresenter(alert);

@@ -1,6 +1,7 @@
 /* global navigationDocument */
 
 var Presenter = {
+  currentDoc: null,
   createDocument: function(template) {
     if (!Presenter.parser) {
       Presenter.parser = new DOMParser();
