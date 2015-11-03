@@ -18,7 +18,21 @@ var AlbumList = {
     return template;
   },
   createCatalog: function(data, grid) {
-    var templateString = '<?xml version="1.0" encoding="UTF-8" ?> <document> <catalogTemplate> <banner> <title>' + data.artist + '</title> </banner> <list> <section> <listItemLockup> <title>Albums</title> <decorationLabel>'+data.albumCount+'</decorationLabel> <relatedContent>'+grid+'</relatedContent> </listItemLockup> </section> </list> </catalogTemplate> </document>';
+    var templateString = `
+      <catalogTemplate>
+        <banner>
+          <title>${data.artist}</title>
+        </banner>
+        <list>
+          <section>
+            <listItemLockup>
+              <title>Albums</title>
+              <decorationLabel>${data.albumCount}</decorationLabel>
+              <relatedContent>${grid}</relatedContent>
+            </listItemLockup>
+          </section>
+        </list>
+      </catalogTemplate>`;
 
     return Presenter.createDocument(templateString);
   },
@@ -56,13 +70,15 @@ var Album = {
 
     for (var i = 0; i < json.tracks.items.length; i++) {
       var song = json.tracks.items[i];
-      template += `<listItemLockup audioURL="${song.preview_url}" audioArt="${json.images[0].url}" audioTitle="${song.name}" artistSubtitle="${json.artists[0].name}" audioDesc="${json.name}">
-        <title>'+song.name+'</title>
+      var cover = json.images[0].url;
+      var artist = json.artists[0].name;
+      template += `<listItemLockup audioURL="${song.preview_url}" audioArt="${cover}" audioTitle="${song.name}" artistSubtitle="${artist}" audioDesc="${json.name}">
+        <title>${song.name}</title>
         <relatedContent>
           <lockup>
-            <img src="${json.images[0].url}" width="512" height="512" />
+            <img src="${cover}" width="640" height="640" />
             <title>${json.name}</title>
-            <description>${json.artists[0].name}</description>
+            <description>${artist}</description>
           </lockup>
         </relatedContent>
       </listItemLockup>`;
@@ -73,7 +89,7 @@ var Album = {
     return template;
   },
   createList: function(grid) {
-    var templateString = '<?xml version="1.0" encoding="UTF-8" ?> <document> <listTemplate> <list> <header>Songs</header> '+grid+' </list> </listTemplate> </document>';
+    var templateString = '<listTemplate> <list> <header>Songs</header> '+grid+' </list> </listTemplate>';
 
     return Presenter.createDocument(templateString);
   },

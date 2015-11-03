@@ -1,12 +1,14 @@
 /* global navigationDocument */
 
 var Presenter = {
-  createDocument: function(resource) {
+  createDocument: function(template) {
     if (!Presenter.parser) {
       Presenter.parser = new DOMParser();
     }
 
-    var doc = Presenter.parser.parseFromString(resource, 'application/xml');
+    var xml = `<?xml version="1.0" encoding="UTF-8" ?><document>${template}</document>`;
+
+    var doc = Presenter.parser.parseFromString(xml, 'application/xml');
     return doc;
   },
   modalDialogPresenter: function(xml) {
