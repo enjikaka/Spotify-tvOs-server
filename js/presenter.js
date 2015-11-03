@@ -1,3 +1,5 @@
+/* global navigationDocument */
+
 var Presenter = {
   createDocument: function(resource) {
     if (!Presenter.parser) {

@@ -6,7 +6,11 @@
   },
   "rules": {
     "semi": [2, "always"],
-    "quotes": [2, "single", "avoid-escape"]
+    "quotes": [2, "single", "avoid-escape"],
+    "no-unused-vars": [1, {"vars": "all", "args": "after-used"}]
+  },
+  "ecmaFeatures": {
+    "templateStrings": true
   },
   "extends": "eslint:recommended"
 }

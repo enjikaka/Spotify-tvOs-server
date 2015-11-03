@@ -1,10 +1,17 @@
+/* global Presenter, WebAPI, Player, Playlist, MediaItem, App, evaluateScripts */
+
 var AlbumList = {
   createGrid: function(json) {
     var template = '<grid><section>';
 
     for (var i = 0; i < json.items.length; i++) {
       var album = json.items[i];
-      template += '<lockup albumId="'+album.id+'"><img src="'+album.images[0].url+'" width="256" height="256" /><title>'+album.name+'</title></lockup>';
+      template += `
+        <lockup albumId="${album.id}">
+          <img src="${album.images[0].url}" width="256" height="256" />
+          <title>${album.name}</title>
+        </lockup>
+      `;
     }
     template += '</section></grid>';
 
@@ -49,7 +56,16 @@ var Album = {
 
     for (var i = 0; i < json.tracks.items.length; i++) {
       var song = json.tracks.items[i];
-      template += '<listItemLockup audioURL="'+song.preview_url+'" audioArt="'+json.images[0].url+'" audioTitle="'+song.name+'" artistSubtitle="'+json.artists[0].name+'" audioDesc="'+json.name+'"> <title>'+song.name+'</title> <relatedContent> <lockup> <img src="'+json.images[0].url+'" width="512" height="512" /> <title>'+json.name+'</title> <description>'+json.artists[0].name+'</description> </lockup> </relatedContent> </listItemLockup>';
+      template += `<listItemLockup audioURL="${song.preview_url}" audioArt="${json.images[0].url}" audioTitle="${song.name}" artistSubtitle="${json.artists[0].name}" audioDesc="${json.name}">
+        <title>'+song.name+'</title>
+        <relatedContent>
+          <lockup>
+            <img src="${json.images[0].url}" width="512" height="512" />
+            <title>${json.name}</title>
+            <description>${json.artists[0].name}</description>
+          </lockup>
+        </relatedContent>
+      </listItemLockup>`;
     }
 
     template += '</section>';
