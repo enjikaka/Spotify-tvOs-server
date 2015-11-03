@@ -1,4 +1,4 @@
-/* global Presenter, WebAPI, Player, getFeature, Playlist, MediaItem, App, evaluateScripts */
+/* global Presenter, WebAPI, Player, Playlist, MediaItem, App, evaluateScripts */
 
 function escapeForXML(string) {
   return string
@@ -170,7 +170,7 @@ var Search = {
 
     return template;
   },
-  createSearch: function(json) {
+  createSearch: function() {
     var templateString = `
       <searchTemplate>
         <searchField />
