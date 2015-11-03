@@ -145,16 +145,15 @@ var Album = {
 
 
 var createAlert = function(title, desc) {
-  var alertString = `<?xml version="1.0" encoding="UTF-8" ?>
-    <document>
-      <alertTemplate>
-        <title>${title}</title>
-        <description>${desc}</description>
-        <button>
-          <text>OK</text>
-        </button>
-      </alertTemplate>
-    </document>`;
+  var alertString = `
+    <alertTemplate>
+      <title>${title}</title>
+      <description>${desc}</description>
+      <button>
+        <text>OK</text>
+      </button>
+    </alertTemplate>
+  `;
 
   return Presenter.createDocument(alertString);
 };
@@ -167,7 +166,7 @@ App.onLaunch = function(options) {
 
   evaluateScripts(javascriptFiles, function(success) {
     if (success) {
-      AlbumList.render('75EZuo5MHV2572NRpMWotC');
+      AlbumList.render('6zDFhpdu4WUVVGTz0JSLMh');
     } else {
       var alert = createAlert('Woops!', 'Looks like an error occured!');
       Presenter.modalDialogPresenter(alert);
