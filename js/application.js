@@ -1,15 +1,24 @@
 /* global Presenter, WebAPI, Player, Playlist, MediaItem, App, evaluateScripts */
 
+function escapeForXML(string) {
+  return string
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 var AlbumList = {
   createGrid: function(json) {
     var template = '<grid><section>';
 
     for (var i = 0; i < json.items.length; i++) {
       var album = json.items[i];
+      var albumName = escapeForXML(album.name);
       template += `
         <lockup albumId="${album.id}">
           <img src="${album.images[0].url}" width="256" height="256" />
-          <title>${album.name}</title>
+          <title>${albumName}</title>
         </lockup>
       `;
     }
@@ -18,10 +27,12 @@ var AlbumList = {
     return template;
   },
   createCatalog: function(data, grid) {
+    var artist = escapeForXML(data.artist);
+
     var templateString = `
       <catalogTemplate>
         <banner>
-          <title>${data.artist}</title>
+          <title>${artist}</title>
         </banner>
         <list>
           <section>
@@ -71,13 +82,16 @@ var Album = {
     for (var i = 0; i < json.tracks.items.length; i++) {
       var song = json.tracks.items[i];
       var cover = json.images[0].url;
-      var artist = json.artists[0].name;
-      template += `<listItemLockup audioURL="${song.preview_url}" audioArt="${cover}" audioTitle="${song.name}" artistSubtitle="${artist}" audioDesc="${json.name}">
-        <title>${song.name}</title>
+      var artist = escapeForXML(json.artists[0].name);
+      var songName = escapeForXML(song.name);
+      var albumName = escapeForXML(json.name);
+
+      template += `<listItemLockup audioURL="${song.preview_url}" audioArt="${cover}" audioTitle="${songName}" artistSubtitle="${artist}" audioDesc="${albumName}">
+        <title>${songName}</title>
         <relatedContent>
           <lockup>
             <img src="${cover}" width="640" height="640" />
-            <title>${json.name}</title>
+            <title>${albumName}</title>
             <description>${artist}</description>
           </lockup>
         </relatedContent>
@@ -153,7 +167,7 @@ App.onLaunch = function(options) {
 
   evaluateScripts(javascriptFiles, function(success) {
     if (success) {
-      AlbumList.render('0lLY20XpZ9yDobkbHI7u1y');
+      AlbumList.render('75EZuo5MHV2572NRpMWotC');
     } else {
       var alert = createAlert('Woops!', 'Looks like an error occured!');
       Presenter.modalDialogPresenter(alert);
