@@ -1,0 +1,28 @@
+{
+  "name": "spotify-tvos-server",
+  "version": "0.0.1",
+  "description": "tvOS server for Spotify Web API",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run server",
+    "server": "serve --port 9001 ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enjikaka/Spotify-tvOs-server.git"
+  },
+  "keywords": [
+    "spotify",
+    "tvos",
+    "tvml"
+  ],
+  "author": "Jeremy Karlsson <karlsson@jeremy.se>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enjikaka/Spotify-tvOs-server/issues"
+  },
+  "homepage": "https://github.com/enjikaka/Spotify-tvOs-server#readme",
+  "dependencies": {
+    "serve": "^1.4.0"
+  }
+}
