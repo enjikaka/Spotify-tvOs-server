@@ -188,6 +188,8 @@ var Search = {
   searchViewLoad: function(event) {
     var searchField = event.target.childNodes.item(0);
     var keyboard = searchField.getFeature('Keyboard');
+
+    // Kinda like the change/input event on <input>
     keyboard.onTextChange = function() {
       var query = Search.sanitizeString(keyboard.text.replace(/-/g, ''));
 
@@ -204,6 +206,7 @@ var Search = {
   },
   updateGrid: function(json) {
     var grid = this.createGrid(json);
+    // Find the <list>
     var ele = this.doc.childNodes.item(0).childNodes.item(0).childNodes.item(1);
     ele.innerHTML = grid;
   },
